@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.materialicons.MaterialIconView?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -14,12 +15,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.5354767184035477" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../style/colors.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-fx:controller="client.gui.controller.LoginView" >
+<SplitPane dividerPositions="0.5354767184035477" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controller.LoginView">
   <items>
-    <AnchorPane minHeight="0.0" minWidth="0.0">
+    <AnchorPane>
          <children>
-            <VBox alignment="TOP_CENTER" spacing="40.0" styleClass="floating-box" stylesheets="@../style/custom_text_field.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="TOP_CENTER" spacing="40.0" stylesheets="@../style/custom_text_field.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label text="Login">
                      <font>
@@ -104,13 +104,16 @@ fx:controller="client.gui.controller.LoginView" >
                   </Button>
                </children>
                <padding>
-                  <Insets bottom="30.0" left="50.0" right="50.0" top="30.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
             </VBox>
-         </children></AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0">
+         </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding></AnchorPane>
+    <AnchorPane>
          <children>
-            <VBox alignment="TOP_CENTER" spacing="40.0" styleClass="floating-box" stylesheets="@../style/custom_text_field.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="TOP_CENTER" spacing="40.0" stylesheets="@../style/custom_text_field.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label text="Sign Up">
                      <font>
@@ -195,12 +198,17 @@ fx:controller="client.gui.controller.LoginView" >
                   </Button>
                </children>
                <padding>
-                  <Insets bottom="30.0" left="50.0" right="50.0" top="30.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
             </VBox>
-         </children></AnchorPane>
+         </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding></AnchorPane>
   </items>
-   <padding>
-      <Insets left="30.0" right="30.0" />
-   </padding>
+   <stylesheets>
+      <URL value="@../style/colors.css" />
+      <URL value="@../style/custom-container.css" />
+      <URL value="@../style/login-view.css" />
+   </stylesheets>
 </SplitPane>

@@ -1,0 +1,8 @@
+.parent-container{
+    -fx-border-radius:20px;
+    -fx-background-radius: 20px;
+    -fx-border-width:2px;
+    -fx-border-color: -button-hover;
+    -fx-background-color:-theme-grey;
+}
+

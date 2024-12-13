@@ -1,0 +1,61 @@
+.mfx-scroll-pane:fitToWidth{
+    -fx-background-color: transparent;
+}
+.mfx-scroll-pane:fitToWidth .paneport{
+    -fx-background-color:transparent;
+}
+
+.mfx-scroll-pane:fitToWidth .scroll-bar:vertical .thumb{
+    -fx-background-radius:10px;
+    -fx-background-color:-theme-light-blue;
+}
+
+.mfx-scroll-pane:fitToWidth .scroll-bar:vertical .thumb:hover{
+    -fx-background-color:-theme-blue;
+}
+
+.mfx-scroll-pane:fitToWidth .scroll-bar:vertical .track{
+    -fx-background-color: white;
+
+}
+
+.mfx-scroll-pane:fitToWidth .scroll-bar:horizontal .thumb{
+    -fx-background-color:-theme-light-blue;
+    -fx-background-radius:10px;
+}
+
+.mfx-scroll-pane:fitToWidth .scroll-bar:horizontal .thumb:hover{
+    -fx-background-color:-theme-blue;
+}
+
+.mfx-scroll-pan:fitToWidth .scroll-bar:horizontal .track{
+    -fx-background-color: white;
+}
+
+
+.mfx-scroll-pane:fitToWidth .scroll-bar:vertical .increment-button{
+    -fx-padding:0;
+}
+.mfx-scroll-pane:fitToWidth .scroll-bar:vertical .increment-button .increment-arrow{
+    -fx-padding:0;
+}
+.mfx-scroll-pane:fitToWidth .scroll-bar:vertical .decrement-button{
+    -fx-padding:0;
+}
+
+.mfx-scroll-pane:fitToWidth .scroll-bar:vertical .decrement-button .decrement-arrow{
+    -fx-padding:0;
+}
+.mfx-scroll-pane:fitToWidth .scroll-bar:horizontal .increment-button{
+    -fx-padding:0;
+}
+.mfx-scroll-pane:fitToWidth .scroll-bar:horizontal .increment-button .increment-arrow{
+    -fx-padding:0;
+}
+.mfx-scroll-pane:fitToWidth .scroll-bar:horizontal .decrement-button{
+    -fx-padding:0;
+}
+
+.mfx-scroll-pane:fitToWidth .scroll-bar:horizontal .decrement-button .decrement-arrow{
+    -fx-padding:0;
+}

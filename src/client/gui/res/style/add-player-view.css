@@ -1,0 +1,5 @@
+.split-pane:horizontal .split-pane-divider{
+    -fx-background-radius: 10px;
+    -fx-border-radius:10px;
+    -fx-background-color: -theme-bright-blue;
+}

@@ -1,0 +1,51 @@
+.parent{
+    -fx-background-color: #252525;
+}
+
+
+
+
+.split-pane:horizontal{
+    -fx-background-color:white;
+    -fx-border-radius:20px;
+    -fx-background-radius:20px;
+    -fx-border-width:1px;
+    -fx-effect: innershadow( two-pass-box , -theme-deep-blue, 4 , 0.2 ,0 , 0);
+}
+
+.split-pane:horizontal .split-pane-divider{
+    -fx-background-radius: 10px;
+    -fx-border-radius:10px;
+    -fx-background-color: black;
+
+}
+.back-button{
+
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+
+
+
+    -fx-background-color:transparent;
+
+
+    -fx-text-fill: white;
+
+    -fx-border-color: white;
+
+
+
+    -fx-cursor:hand;
+}
+
+
+.back-button:hover{
+
+
+    -fx-background-color:white;
+    -fx-text-fill:-button-hover
+
+}
+.back-button:hover .glyph-icon{
+    -fx-fill:-button-hover
+}

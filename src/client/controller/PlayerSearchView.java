@@ -1,20 +1,21 @@
-package client.gui.controller;
+package client.controller;
 
-import client.Club;
-import client.ServerReader;
-import client.gui.components.View;
-import database.IOWrapper;
+import utils.Club;
+import utils.network.ServerReader;
+import client.components.View;
+import utils.IOWrapper;
 import entities.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import utils.PlayerSearcher;
+import utils.filter.PlayerSearcher;
 import utils.attribute.Attribute;
 import utils.attribute.RangeAttribute;
 import utils.attribute.StringAttribute;
@@ -246,8 +247,7 @@ public class PlayerSearchView extends View {
 
         }
 
-        search = new PlayerSearcher(Club.getClub().players);
-
+        search = Club.getClub().getSearch();
 
 
 
@@ -256,16 +256,28 @@ public class PlayerSearchView extends View {
     public void onStatComboBoxAction(ActionEvent e){
         String selected = statComboBox.getValue();
 
-        IOWrapper io = ServerReader.getInstance().getIO();
+//        IOWrapper io = ServerReader.getInstance().getIO();
         if(selected.contains("maximum")){
             AttributeKey key = AttributeKey.AGE;
             if(selected.contains("height"))key = AttributeKey.HEIGHT;
             else if(selected.contains("salary"))key=AttributeKey.SALARY;
-            if(io != null){
-                io.write(new Data(Action.SEARCH_MAX,"max search",false,key));
-            }
+//            if(io != null){
+//                io.write(new Data(Action.SEARCH_MAX,"max search",false,key));
+//            }
+
+            clearContainer();
+            addPlayers(search.getPlayersWithMaximum(club.name,key));
+
         }else{
-            io.write(new Data(Action.TOTAL_YEARLY_SALARY,"total yearly salary",false,Action.TOTAL_YEARLY_SALARY));
+//            io.write(new Data(Action.TOTAL_YEARLY_SALARY,"total yearly salary",false,Action.TOTAL_YEARLY_SALARY));
+
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText("Total yearly salary");
+            alert.setContentText(""+club.getTotalYearlySalary());
+            alert.showAndWait();
+
         }
 
 

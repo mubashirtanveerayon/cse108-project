@@ -1,4 +1,4 @@
-package utils;
+package utils.filter;
 
 import entities.Player;
 import utils.attribute.Attribute;
@@ -8,7 +8,7 @@ import utils.enums.AttributeKey;
 
 import java.util.ArrayList;
 
-public class PlayerSearcher implements Filter{
+public final class PlayerSearcher implements Filter,java.io.Serializable{
     private final ArrayList<Player>players;
 
     public PlayerSearcher(ArrayList<Player> players){

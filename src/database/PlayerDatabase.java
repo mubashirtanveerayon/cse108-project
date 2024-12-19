@@ -1,7 +1,8 @@
 package database;
 
-import utils.Filter;
-import utils.PlayerSearcher;
+import utils.filter.Filter;
+import utils.filter.PlayerSearcher;
+import utils.attribute.NumericAttribute;
 import utils.enums.AttributeKey;
 import entities.Player;
 import utils.exceptions.MultipleInitializationException;
@@ -13,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PlayerDatabase implements Filter {
+public final class PlayerDatabase implements Filter {
 
 
     ArrayList<Player> players;
@@ -55,6 +56,10 @@ public class PlayerDatabase implements Filter {
 
 
         search = new PlayerSearcher(players);
+    }
+
+    public final ArrayList<Player>players(){
+        return new ArrayList<>(players);
     }
 
     private static Player loadPlayer(byte[] data,int length){
@@ -150,7 +155,7 @@ public class PlayerDatabase implements Filter {
     }
 
     public boolean addPlayer(Player player) {
-        if(players.contains(player))return false;
+        if(players.contains(player) ||(( player.hasAttribute(AttributeKey.CLUB) )&& !filterPlayers(new StringAttribute(player.getClub(),AttributeKey.CLUB),new NumericAttribute(player.getNumber(),AttributeKey.NUMBER)).isEmpty()))return false;
         players.add(player);
         return true;
     }

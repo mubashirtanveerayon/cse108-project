@@ -1,7 +1,7 @@
-package client.gui.controller;
+package client.controller;
 
-import client.Club;
-import client.gui.components.View;
+import utils.Club;
+import client.components.View;
 import entities.Player;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -52,7 +52,7 @@ public class MarketplaceView extends View {
 
 
 
-            controller.actionButton.setText("Buy for "+price);
+            controller.actionButton.setText("Buy for $"+price);
 
 
             player.toggleForSale();

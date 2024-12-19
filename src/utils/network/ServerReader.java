@@ -1,14 +1,13 @@
-package client;
+package utils.network;
 
-import client.gui.controller.AddPlayerView;
-import client.gui.controller.MarketplaceView;
-import client.gui.components.View;
-import client.gui.controller.PlayerSearchView;
-import database.IOWrapper;
+import utils.Club;
+import client.controller.AddPlayerView;
+import client.controller.MarketplaceView;
+import client.components.View;
+import client.controller.PlayerSearchView;
+import utils.IOWrapper;
 import entities.Player;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import utils.response.Action;
 import utils.response.Data;
@@ -52,19 +51,21 @@ public class ServerReader extends Thread{
                         }
                 );
             }else if(r.action == Action.ADD){
-                if(r.success && r instanceof Data && ((Data)r).data instanceof Player){
-                    Player player = (Player)((Data)r).data;
+                if(r.success && r instanceof Data && ((Data)r).data instanceof Player) {
+                    Player player = (Player) ((Data) r).data;
                     Club.getClub().players.add(player);
+
+
                 }
                 Platform.runLater(
-                        ()->{
+                        () -> {
                             Alert alert = new Alert((r.success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR));
                             alert.setContentText(r.message);
                             alert.show();
 
-                            if(r.success && View.currentView instanceof AddPlayerView){
+                            if (r.success && View.currentView instanceof AddPlayerView) {
                                 View currentView = View.currentView;
-                                ((AddPlayerView)currentView).loadSearchView();
+                                ((AddPlayerView) currentView).loadSearchView();
                             }
 
                         }

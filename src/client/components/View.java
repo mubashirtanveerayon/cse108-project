@@ -1,6 +1,6 @@
-package client.gui.components;
+package client.components;
 
-import client.gui.controller.MainView;
+import client.controller.MainView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;

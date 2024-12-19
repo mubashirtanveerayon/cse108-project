@@ -1,20 +1,21 @@
-package client.gui.controller;
+package client.controller;
 
-import client.Club;
-import client.ServerReader;
-import client.gui.components.View;
-import database.IOWrapper;
+import utils.Club;
+import utils.network.ServerReader;
+import client.components.View;
+import utils.IOWrapper;
+import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import entities.Player;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import utils.enums.AttributeKey;
 import utils.response.Action;
 import utils.response.Data;
@@ -29,11 +30,18 @@ public class PlayerCard extends  View{
     @FXML
     public Button actionButton;
 
+
+    @FXML
+    private MaterialIconView actionButtonIcon;
+
     @FXML
     private Label clubLabel;
 
     @FXML
     private Button detailsButton;
+
+    @FXML
+    private ImageView positionImage;
 
     @FXML
     private Label nameLabel;
@@ -131,11 +139,22 @@ public class PlayerCard extends  View{
     }
 
     public void setPlayer(Player player,boolean inMarketPlace){
-        this.player = player;
         this.inMarketPlace = inMarketPlace;
+        this.player = player;
         nameLabel.setText(player.getName());
         clubLabel.setText(player.getClub());
 
+        // set image to positionImage image view
+        String fileName = "bat";
+        String position = player.getPosition();
+        if(position.equalsIgnoreCase("bowler"))fileName = "ball";
+        else if(position.equalsIgnoreCase("wicketkeeper"))fileName = "helmet";
+        else if(position.equalsIgnoreCase("allrounder"))fileName = "bat and ball";
+
+        Image positionImg = new Image(getClass().getResourceAsStream(String.format("/client/gui/res/images/%s.png",fileName)));
+        positionImage.setImage(positionImg);
+
+        if(!inMarketPlace)actionButtonIcon.setGlyphName("MONETIZATION_ON");
 
     }
 

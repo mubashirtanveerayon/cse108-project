@@ -52,14 +52,14 @@ public abstract class Entity implements Serializable {
     }
 
 
-    public boolean hasAttribute(Attribute attribute){
+    public boolean hasAttribute(AttributeKey attributeKey){
 //        int count=0;
 //        for (Attribute attribute : attributes) {
 //            if (this.attributes.containsKey(attribute.getKey()))count++;
 //        }
 //        return count == attributes.length;
 
-        return attributes.containsKey(attribute.getKey());
+        return attributes.containsKey(attributeKey);
     }
 
     public abstract boolean containsAttribute(Attribute ...attributes);

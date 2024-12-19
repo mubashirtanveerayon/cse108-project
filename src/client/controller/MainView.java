@@ -1,9 +1,9 @@
-package client.gui.controller;
+package client.controller;
 
-import client.Club;
-import client.ServerReader;
-import client.gui.components.View;
-import database.IOWrapper;
+import utils.Club;
+import utils.network.ServerReader;
+import client.components.View;
+import utils.IOWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

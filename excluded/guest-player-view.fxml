@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" styleClass="parent" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controller.PlayerView">
+<AnchorPane fx:id="root" styleClass="parent" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PlayerView">
    <children>
       <SplitPane dividerPositions="0.470873786407767" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -38,9 +38,9 @@
             </AnchorPane>
           <AnchorPane minHeight="-Infinity" minWidth="-Infinity">
                <children>
-                  <HBox alignment="CENTER_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox alignment="CENTER_LEFT" spacing="120.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
+                        <VBox alignment="CENTER_LEFT" spacing="10.0">
                            <children>
                               <Label fx:id="positionLabel" text="Position">
                                  <font>
@@ -107,7 +107,7 @@
       <Insets bottom="50.0" left="30.0" right="30.0" top="50.0" />
    </padding>
    <stylesheets>
-      <URL value="@../style/player-view.css" />
-      <URL value="@../style/colors.css" />
+      <URL value="@client/gui/res/style/player-view.css" />
+      <URL value="@client/gui/res/style/colors.css" />
    </stylesheets>
 </AnchorPane>

@@ -1,12 +1,12 @@
-package client.gui.controller;
+package client.controller;
 
-import client.Club;
+import utils.Club;
 
 // import client.ServerReader;
-import client.ServerReader;
-import client.gui.components.View;
-import database.IOWrapper;
-import database.Server;
+import utils.network.ServerReader;
+import client.components.View;
+import utils.IOWrapper;
+import utils.network.Server;
 import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import utils.HelperFunctions;
 import utils.response.Action;
 import utils.response.Data;
 import utils.response.Response;
@@ -68,7 +67,7 @@ public class LoginView extends View {
         try{
             Socket socket = new Socket(Server.IP, Server.PORT);
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            oos.writeObject(new Data(Action.SIGNUP,"signup",false,signUpClubName+":"+ HelperFunctions.sha256(signUpPassword)));
+            oos.writeObject(new Data(Action.SIGNUP,"signup",false,signUpClubName+":"+ signUpPassword));
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             Object o = ois.readObject();
             if(o instanceof Response){
@@ -116,7 +115,7 @@ public class LoginView extends View {
         try{
             Socket socket = new Socket(Server.IP, Server.PORT);
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            oos.writeObject(new Data(Action.LOGIN,"login",false,clubName+":"+ HelperFunctions.sha256(password)));
+            oos.writeObject(new Data(Action.LOGIN,"login",false,clubName+":"+ password));
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             Object o = ois.readObject();
             if(o instanceof Data){

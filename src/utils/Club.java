@@ -1,7 +1,7 @@
-package client;
+package utils;
 
-import database.IOWrapper;
 import entities.Player;
+import utils.filter.PlayerSearcher;
 import utils.attribute.StringAttribute;
 import utils.enums.AttributeKey;
 
@@ -24,15 +24,23 @@ public class Club implements Serializable {
 
     public final StringAttribute clubAttribute;
 
+    public PlayerSearcher getSearch() {
+        return search;
+    }
+
+    private final PlayerSearcher search;
+
     public Club(String name, ArrayList<Player> players, HashMap<Player,String> forAuction) {
         this.name = name;
         this.players = players;
         this.forAuction = forAuction;
         clubAttribute = new StringAttribute(name, AttributeKey.CLUB);
+        search = new PlayerSearcher(players);
     }
 
     public static void setClub(Club club) {
         Club.club = club;
+
     }
 
     public static Club getClub() {
@@ -40,7 +48,11 @@ public class Club implements Serializable {
     }
 
 
+    public long getTotalYearlySalary() {
+        float total = 0;
+        for(Player p:players)
+            total += p.getSalary();
+        return (long)total * 48;
 
-
-
+    }
 }

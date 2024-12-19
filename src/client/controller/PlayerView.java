@@ -1,6 +1,6 @@
-package client.gui.controller;
+package client.controller;
 
-import client.gui.components.View;
+import client.components.View;
 import entities.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

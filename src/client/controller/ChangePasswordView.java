@@ -1,8 +1,8 @@
-package client.gui.controller;
+package client.controller;
 
-import client.ServerReader;
-import client.gui.components.View;
-import database.IOWrapper;
+import utils.network.ServerReader;
+import client.components.View;
+import utils.IOWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
@@ -93,7 +93,7 @@ public class ChangePasswordView extends View {
         if(sr == null)return;
         IOWrapper  io  = sr.getIO();
         io.write(data);
-        System.out.println( "Request sent");
+
 
 
 

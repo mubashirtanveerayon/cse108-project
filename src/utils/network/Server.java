@@ -1,8 +1,11 @@
-package database;
+package utils.network;
 
-import client.Club;
+import utils.Club;
+import database.PlayerDatabase;
 import entities.Player;
 import utils.HelperFunctions;
+import utils.IOWrapper;
+import utils.attribute.Attribute;
 import utils.attribute.StringAttribute;
 import utils.enums.AttributeKey;
 import utils.response.Action;
@@ -16,21 +19,20 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class Server extends Thread{
     public static final String IP = "127.0.0.1";
     public static final long DELAY = 1000;
     public static final int TIMEOUT = 60;
-    private Map<String, ClientReader>clients;
-    HashMap<String,String>loginCredentials;
+    private Map<Attribute, ClientReader>clients;
+    HashMap<Attribute,String>loginCredentials;
     HashMap<Player,String>forAuction;
     public static final int PORT = 8000;
     private boolean running=false;
 
     public Server(){
         PlayerDatabase.initialize();
-        clients = new HashMap<String,ClientReader>();
+        clients = new HashMap<Attribute,ClientReader>();
         loginCredentials = new HashMap<>();
         forAuction = new HashMap<>();
 //        Random r = new Random();
@@ -103,25 +105,27 @@ public class Server extends Thread{
                         socket.close();
                         return;
                     }
-
-                    if (clients.containsKey(parts[0])) {
+                    Attribute clubAttr =  new StringAttribute(parts[0], AttributeKey.CLUB);
+                    if (clients.containsKey(clubAttr)) {
                         oos.writeObject(new Response(received.action,"Club is already logged in",false,true));
                         socket.close();
                         return;
                     }
 
-                    if (!loginCredentials.containsKey(parts[0])) {
+
+
+                    if (!loginCredentials.containsKey(clubAttr)) {
                         oos.writeObject(new Response(received.action,"This club does not exists",false,true));
                         socket.close();
                         return;
                     }
-                    if (!loginCredentials.get(parts[0]).equals(parts[1])) {
+                    if (!loginCredentials.get(clubAttr).equals(HelperFunctions.sha256(parts[1]))) {
                         oos.writeObject(new Response(received.action,"Incorrect password",false,true));
                         socket.close();
                         return;
                     }
 
-                    ArrayList<Player> players = PlayerDatabase.getInstance().filterPlayers(new StringAttribute(parts[0], AttributeKey.CLUB));
+                    ArrayList<Player> players = PlayerDatabase.getInstance().filterPlayers(clubAttr);
 
 
 
@@ -134,9 +138,9 @@ public class Server extends Thread{
 
 
 
-                    ClientReader reader =  new ClientReader( parts[0],io,server);
+                    ClientReader reader =  new ClientReader( club,io,server);
                     reader.start();
-                    clients.put(parts[0],reader);
+                    clients.put(club.clubAttribute,reader);
 
                 }else if(received.action == Action.SIGNUP){
                     if (!(received.data instanceof String)) {
@@ -153,13 +157,15 @@ public class Server extends Thread{
                         return;
                     }
 
-                    if (loginCredentials.containsKey(parts[0])) {
+                    Attribute clubAttr = new StringAttribute(parts[0],AttributeKey.CLUB);
+
+                    if (loginCredentials.containsKey(clubAttr)) {
                         oos.writeObject(new Response(received.action,"Club is already registered",false,true));
                         socket.close();
                         return;
                     }
 
-                   loginCredentials.put(parts[0],parts[1]);
+                   loginCredentials.put(clubAttr,HelperFunctions.sha256(parts[1]));
 
                     oos.writeUnshared(new Response(received.action,"Registration successful. Login with this credential to continue.",true,true));
                     socket.close();
@@ -184,7 +190,7 @@ public class Server extends Thread{
                 break;
             }
 
-            System.out.println(forAuction.size());
+//            System.out.println(forAuction.size());
 //            if (clients.isEmpty()){
 //                idleCounter ++;
 //                System.out.println("Server will shutdown in "+(TIMEOUT-idleCounter)+" seconds...");
@@ -200,26 +206,26 @@ public class Server extends Thread{
         PlayerDatabase.close();
     }
 
-    public void broadcast(String clubSendingMessage,Data data){
-        for(String club:clients.keySet())
+    public void broadcast(Club clubSendingMessage,Data data){
+        for(Attribute club:clients.keySet()) {
 
-            if(!club.equals(clubSendingMessage)) {
+            if (!club.equals(clubSendingMessage.clubAttribute)) {
                 ClientReader reader = clients.get(club);
-                System.out.println(club);
+
                 reader.io.write(data);
             }
-
+        }
     }
 
 
-    public boolean updatePassword(String club, String currentPassword, String newPassword) {
+    public boolean updatePassword(Attribute club, String currentPassword, String newPassword) {
 
         if(!loginCredentials.containsKey(club)||!loginCredentials.get(club).equals(currentPassword))return false;
         loginCredentials.put(club,newPassword);
         return true;
     }
 
-    public void removeClient(String club) {
+    public void removeClient(Attribute club) {
         clients.remove(club);
     }
 }

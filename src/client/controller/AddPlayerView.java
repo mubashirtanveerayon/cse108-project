@@ -1,9 +1,9 @@
-package client.gui.controller;
+package client.controller;
 
-import client.Club;
-import client.ServerReader;
-import client.gui.components.View;
-import database.IOWrapper;
+import utils.Club;
+import utils.network.ServerReader;
+import client.components.View;
+import utils.IOWrapper;
 import entities.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -95,10 +95,13 @@ public class AddPlayerView extends View {
         Player player = null;
         if(number<0)
             player = new Player(name,country,age,height,club,position,salary);
-        else player = new Player(name,country,age,height,club,position,number,salary);
+        else
+            player = new Player(name, country, age, height, club, position, number, salary);
+
 
         IOWrapper io = ServerReader.getInstance().getIO();
         io.write(new Data(Action.ADD,"add",false,player));
+
 
     }
 

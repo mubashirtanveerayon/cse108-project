@@ -1,6 +1,9 @@
-package database;
+package utils.network;
 
+import utils.Club;
+import database.PlayerDatabase;
 import entities.Player;
+import utils.IOWrapper;
 import utils.attribute.Attribute;
 import utils.attribute.StringAttribute;
 import utils.enums.AttributeKey;
@@ -9,23 +12,21 @@ import utils.response.Data;
 import utils.response.Response;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ClientReader extends Thread{
 
     final PlayerDatabase db;
-    final String club;
+    final Club club;
     final IOWrapper io;
 
-    Attribute clubAttribute;
 
     private Server server;
-    public ClientReader(String clubName, IOWrapper io,Server server) {
+    public ClientReader(Club club, IOWrapper io, Server server) {
         this.db = PlayerDatabase.getInstance();
-        this.club = clubName;
+        this.club = club;
         this.io = io;
         this.server = server;
-        clubAttribute = new StringAttribute(club,AttributeKey.CLUB);
+
     }
 
     public void run(){
@@ -57,7 +58,7 @@ public class ClientReader extends Thread{
                         io.write(data.action,"Incompatible data. Expected format: <current password:new password>",false,true);
                         continue;
                     }
-                    if(server.updatePassword(club,parts[0],parts[1])){
+                    if(server.updatePassword(club.clubAttribute,parts[0],parts[1])){
                         io.write(data.action,"Successfully updated",true,true);
                     }else{
                         io.write(data.action,"Failed to update password",false,true);
@@ -105,10 +106,15 @@ public class ClientReader extends Thread{
                         continue;
                     }
                     Player player = (Player)data.data;
-                    Attribute clubAttribute  = new StringAttribute(club, AttributeKey.CLUB);
                     Player fromDatabase = db.filterPlayers(new StringAttribute(player.getName(),AttributeKey.NAME)).get(0);
                     fromDatabase.removeAttribute(AttributeKey.CLUB);
-                    fromDatabase.addAttribute(clubAttribute);
+                    fromDatabase.addAttribute(club.clubAttribute);
+
+                    if(fromDatabase.hasAttribute(AttributeKey.NUMBER) && !club.getSearch().filterPlayers(fromDatabase.getAttribute(AttributeKey.NUMBER)).isEmpty())
+                        fromDatabase.removeAttribute(AttributeKey.NUMBER);
+
+
+
                     fromDatabase.toggleForSale();
                     player.toggleForSale();
                     server.forAuction.remove(player);
@@ -121,7 +127,7 @@ public class ClientReader extends Thread{
 
                     ArrayList<Attribute>attributes = (ArrayList<Attribute>)data.data;
                     Attribute[] attributesArray = new Attribute[attributes.size()+1];
-                    attributesArray[0] = clubAttribute  ;
+                    attributesArray[0] = club.clubAttribute  ;
                     for(int i=0;i<attributes.size();i++)
                         attributesArray[i+1] = attributes.get(i);
                     ArrayList<Player>filtered = db.filterPlayers(attributesArray);
@@ -134,10 +140,10 @@ public class ClientReader extends Thread{
                     }
 
                     AttributeKey key = (AttributeKey)data.data;
-                    ArrayList<Player>filtered = db.getPlayersWithMaximum(club,key);
+                    ArrayList<Player>filtered = db.getPlayersWithMaximum(club.name,key);
                     io.write(new Data(data.action,"search result",true,filtered));
                 }else if(data.action == Action.TOTAL_YEARLY_SALARY){
-                    long totalSalary = db.getTotalYearlySalary(club);
+                    long totalSalary = db.getTotalYearlySalary(club.name);
                     io.write(new Response(data.action,""+totalSalary,true,true));
                 }
 
@@ -148,7 +154,7 @@ public class ClientReader extends Thread{
             e.printStackTrace();
         }
         io.close();
-        server.removeClient(club);
+        server.removeClient(club.clubAttribute);
 
         System.out.println(club+" logged out!");
 

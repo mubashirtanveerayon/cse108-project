@@ -1,8 +1,6 @@
-package database;
+package utils;
 
-import entities.Player;
 import utils.response.Action;
-import utils.response.Data;
 import utils.response.Response;
 
 import java.io.IOException;

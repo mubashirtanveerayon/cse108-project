@@ -30,7 +30,7 @@ public class IOWrapper {
         try{
             oos.writeUnshared(r);
         }catch(Exception e){
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 
@@ -46,7 +46,7 @@ public class IOWrapper {
             return ois.readUnshared();
 
         }catch(Exception e){
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 
         return null;

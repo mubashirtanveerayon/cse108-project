@@ -14,8 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import org.controlsfx.control.RangeSlider;
-import org.w3c.dom.ranges.Range;
+
 import utils.Club;
 import utils.attribute.Attribute;
 import utils.attribute.RangeAttribute;
@@ -173,6 +172,7 @@ public class PlayerListView extends View implements RequiresUpdate {
 
     @FXML
     void onResetFilterPressed(ActionEvent event) {
+        nameSearchField.clear();
            clearContainer();
            addPlayers(club.allPlayers);
 

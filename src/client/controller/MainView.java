@@ -26,6 +26,9 @@ public class MainView extends View {
     double mouseX = 0, mouseY = 0;
 
     @FXML
+    private Button myClubButton;
+
+    @FXML
     BorderPane borderPane;
 
     @FXML
@@ -170,7 +173,7 @@ public class MainView extends View {
     void onSearchPlayerPressed(ActionEvent event) {
 
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/gui/res/view/player-search-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/gui/res/view/playerlist-view.fxml"));
         try{
             Parent root = loader.load();
 //            MarketplaceView controller = loader.getController();
@@ -189,12 +192,27 @@ public class MainView extends View {
         marketPlaceButton.setDisable(loggedOut);
         addPlayerButton.setDisable(loggedOut);
         changePasswordButton.setDisable(loggedOut);
+        myClubButton.setDisable(loggedOut);
         if(loggedOut){
-            clubNameLabel.setText("Login as club owner");
+            clubNameLabel.setText("Login as club manager");
             Club.setClub(null);
 
         }else{
             clubNameLabel.setText(clubName);
         }
+    }
+
+    @FXML
+    void onMyClubPressed(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/gui/res/view/myclub-view.fxml"));
+        try{
+            Parent root = loader.load();
+//            MarketplaceView controller = loader.getController();
+//            controller.setBorderPane(borderPane);
+            borderPane.setCenter(root);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 }

@@ -46,11 +46,20 @@ public class AddPlayerView extends View {
     @FXML
     private ComboBox<String> positionComboBox;
 
+
     @FXML
     private TextField salaryField;
 
     @FXML
     void onAddButtonPressed(ActionEvent event) {
+
+        if(Club.newPlayer != null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Previous request is still being processed, try again later");
+            alert.show();
+            return;
+        }
 
 
         String name = nameField.getText();
@@ -97,7 +106,7 @@ public class AddPlayerView extends View {
             player = new Player(name,country,age,height,club,position,salary);
         else
             player = new Player(name, country, age, height, club, position, number, salary);
-
+        Club.newPlayer = player;
 
         IOWrapper io = ServerReader.getInstance().getIO();
         io.write(new Data(Action.ADD,"add",false,player));
@@ -106,9 +115,10 @@ public class AddPlayerView extends View {
     }
 
 
-    public void loadSearchView() {
 
-        FXMLLoader loader =new FXMLLoader(getClass().getResource("/client/gui/res/view/player-search-view.fxml"));
+    public void loadClubView() {
+
+        FXMLLoader loader =new FXMLLoader(getClass().getResource("/client/gui/res/view/myclub-view.fxml"));
         try{
             Parent root = loader.load();
             getMainView().borderPane.setCenter(root);

@@ -48,7 +48,8 @@ public class MarketplaceView extends View {
             Parent root = loader.load();
             PlayerCard controller = loader.getController();
 
-            controller.setPlayer(player,true);
+            controller.setPlayer(player);
+            controller.inMarketPlace = true;
 
 
 

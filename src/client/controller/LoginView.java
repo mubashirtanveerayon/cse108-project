@@ -128,7 +128,7 @@ public class LoginView extends View {
                 serverReader.start();
                 getMainView().onLog(club.name);
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/gui/res/view/player-search-view.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/gui/res/view/myclub-view.fxml"));
                 try{
                     Parent root =loader.load();
                     getMainView().borderPane.setCenter(root);

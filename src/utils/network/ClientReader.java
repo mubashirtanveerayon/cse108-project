@@ -20,6 +20,7 @@ public class ClientReader extends Thread{
     final IOWrapper io;
 
 
+
     private Server server;
     public ClientReader(Club club, IOWrapper io, Server server) {
         this.db = PlayerDatabase.getInstance();
@@ -76,7 +77,11 @@ public class ClientReader extends Thread{
 
                     synchronized(db){
                         if(db.addPlayer(player)){
-                            io.write(new Data( data.action,"Successfully added player",true,player));
+
+                            io.write(new Data(data.action,"Successfully added player.",true,player));
+
+                            server.broadcast(club,new Data(Action.ADD,"add",true,player));
+
                         }else{
                             io.write(data.action,"Failed to add player.",false,true);
                         }
@@ -88,64 +93,68 @@ public class ClientReader extends Thread{
                     }
 
                     Player player = (Player)data.data;
-                    player.toggleForSale();
+                    Player fromDatabase = db.filterPlayers(new StringAttribute(player.getName(),AttributeKey.NAME)).get(0);
+                    fromDatabase.toggleForSale();
                     server.broadcast(club,new Data(Action.SELL,data.message,true,player));
                     server.forAuction.put(player,data.message);
 
-                    Player fromDatabase = db.filterPlayers(new StringAttribute(player.getName(),AttributeKey.NAME)).get(0);
-                    fromDatabase.toggleForSale();
+
 
                 }else if(data.action == Action.LOGOUT){
                     break;
-                }
-
-
-                else if(data.action == Action.BUY){
+                }else if(data.action == Action.BUY){
                     if(!(data.data instanceof Player)){
                         io.write(data.action,"Incompatible data. Player expected",false,true);
                         continue;
                     }
+
+
+
                     Player player = (Player)data.data;
+
+
+
                     Player fromDatabase = db.filterPlayers(new StringAttribute(player.getName(),AttributeKey.NAME)).get(0);
-                    fromDatabase.removeAttribute(AttributeKey.CLUB);
+//                    fromDatabase.removeAttribute(AttributeKey.CLUB);
                     fromDatabase.addAttribute(club.clubAttribute);
-
-                    if(fromDatabase.hasAttribute(AttributeKey.NUMBER) && !club.getSearch().filterPlayers(fromDatabase.getAttribute(AttributeKey.NUMBER)).isEmpty())
+//
+                    if(fromDatabase.hasAttribute(AttributeKey.NUMBER) && !club.getSearch().filterPlayers(club.clubAttribute,fromDatabase.getAttribute(AttributeKey.NUMBER)).isEmpty())
                         fromDatabase.removeAttribute(AttributeKey.NUMBER);
-
-
-
+//
+//
+//
                     fromDatabase.toggleForSale();
-                    player.toggleForSale();
+//                    player.toggleForSale();
                     server.forAuction.remove(player);
                     server.broadcast(club,new Data(Action.BUY,"buy",true,player));
-                }else if(data.action == Action.SEARCH){
-                    if(!(data.data instanceof ArrayList)){
-                        io.write(data.action,"Incompatible data. ArrayList<Attribute> expected",false,true);
-                        continue;
-                    }
-
-                    ArrayList<Attribute>attributes = (ArrayList<Attribute>)data.data;
-                    Attribute[] attributesArray = new Attribute[attributes.size()+1];
-                    attributesArray[0] = club.clubAttribute  ;
-                    for(int i=0;i<attributes.size();i++)
-                        attributesArray[i+1] = attributes.get(i);
-                    ArrayList<Player>filtered = db.filterPlayers(attributesArray);
-                    Data response = new Data(data.action,"search result",true,filtered);
-                    io.write(response);
-                }else if(data.action == Action.SEARCH_MAX){
-                    if(!(data.data instanceof AttributeKey)){
-                        io.write(data.action,"Incompatible data. AttributeKey expected",false,true);
-                        continue;
-                    }
-
-                    AttributeKey key = (AttributeKey)data.data;
-                    ArrayList<Player>filtered = db.getPlayersWithMaximum(club.name,key);
-                    io.write(new Data(data.action,"search result",true,filtered));
-                }else if(data.action == Action.TOTAL_YEARLY_SALARY){
-                    long totalSalary = db.getTotalYearlySalary(club.name);
-                    io.write(new Response(data.action,""+totalSalary,true,true));
                 }
+//                else if(data.action == Action.SEARCH){
+//                    if(!(data.data instanceof ArrayList)){
+//                        io.write(data.action,"Incompatible data. ArrayList<Attribute> expected",false,true);
+//                        continue;
+//                    }
+//
+//                    ArrayList<Attribute>attributes = (ArrayList<Attribute>)data.data;
+//                    Attribute[] attributesArray = new Attribute[attributes.size()+1];
+//                    attributesArray[0] = club.clubAttribute  ;
+//                    for(int i=0;i<attributes.size();i++)
+//                        attributesArray[i+1] = attributes.get(i);
+//                    ArrayList<Player>filtered = db.filterPlayers(attributesArray);
+//                    Data response = new Data(data.action,"search result",true,filtered);
+//                    io.write(response);
+//                }else if(data.action == Action.SEARCH_MAX){
+//                    if(!(data.data instanceof AttributeKey)){
+//                        io.write(data.action,"Incompatible data. AttributeKey expected",false,true);
+//                        continue;
+//                    }
+//
+//                    AttributeKey key = (AttributeKey)data.data;
+//                    ArrayList<Player>filtered = db.getPlayersWithMaximum(club.name,key);
+//                    io.write(new Data(data.action,"search result",true,filtered));
+//                }else if(data.action == Action.TOTAL_YEARLY_SALARY){
+//                    long totalSalary = db.getTotalYearlySalary(club.name);
+//                    io.write(new Response(data.action,""+totalSalary,true,true));
+//                }
 
 
 

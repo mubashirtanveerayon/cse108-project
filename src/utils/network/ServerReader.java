@@ -1,19 +1,25 @@
 package utils.network;
 
+import client.components.RequiresUpdate;
+import client.controller.PlayerListView;
+import javafx.scene.control.CheckBox;
 import utils.Club;
 import client.controller.AddPlayerView;
 import client.controller.MarketplaceView;
 import client.components.View;
-import client.controller.PlayerSearchView;
+import client.controller.MyClubView;
 import utils.IOWrapper;
 import entities.Player;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import utils.attribute.Attribute;
+import utils.enums.AttributeKey;
 import utils.response.Action;
 import utils.response.Data;
 import utils.response.Response;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ServerReader extends Thread{
 
@@ -51,29 +57,109 @@ public class ServerReader extends Thread{
                         }
                 );
             }else if(r.action == Action.ADD){
-                if(r.success && r instanceof Data && ((Data)r).data instanceof Player) {
-                    Player player = (Player) ((Data) r).data;
-                    Club.getClub().players.add(player);
 
+                if(r instanceof Data){
 
-                }
-                Platform.runLater(
-                        () -> {
+                    Data data = (Data)r;
+                    Player player = (Player)data.data;
+
+                    if(player.containsAttribute(Club.getClub().clubAttribute)){
+                        ArrayList<Player>players = Club.getClub().players;
+                        synchronized (players){
+                            players.add(player);
+                        }
+
+                        Platform.runLater(()->{
                             Alert alert = new Alert((r.success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR));
                             alert.setContentText(r.message);
                             alert.show();
+                            ((AddPlayerView)View.currentView).loadClubView();
+                        });
+                    }
+                    ArrayList<Player>allPlayers=Club.getClub().allPlayers;
+                    synchronized (allPlayers){
+                        allPlayers.add(player);
+                    }
 
-                            if (r.success && View.currentView instanceof AddPlayerView) {
-                                View currentView = View.currentView;
-                                ((AddPlayerView) currentView).loadSearchView();
+                    if(View.currentView instanceof PlayerListView){
+
+
+                        PlayerListView controller = (PlayerListView)View.currentView;
+                        Platform.runLater(()->{
+                            Attribute club = player.getAttribute(AttributeKey.CLUB);
+                            Attribute position = player.getAttribute(AttributeKey.POSITION);
+                            Attribute country = player.getAttribute(AttributeKey.COUNTRY);
+                            if(!controller.clubMap.containsValue(club)){
+
+                               CheckBox cb = controller.createCheckBox();
+                               cb.setText(club.getContent().toString());
+                               controller.clubMap.put(cb,club);
+                               controller.clubContainer.getChildren().add(cb);
+                            }
+                            if(!controller.countryMap.containsValue(country)){
+
+                                CheckBox cb = controller.createCheckBox();
+                                cb.setText(country.getContent().toString());
+                                controller.countryMap.put(cb,country);
+                                controller.countryContainer.getChildren().add(cb);
                             }
 
-                        }
-                );
+                            if(!controller.positionMap.containsValue(position)){
+
+                                CheckBox cb = controller.createCheckBox();
+                                cb.setText(position.getContent().toString());
+                                controller.positionMap.put(cb,position);
+                                controller.positionContainer.getChildren().add(cb);
+                            }
+
+                            controller.filter();
+                        });
+
+
+                    }
+
+
+
+                }else{
+
+                    Platform.runLater(()->{
+                        Alert alert = new Alert((r.success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR));
+                        alert.setContentText(r.message);
+                        alert.show();
+                    });
+
+                }
+
+//                if(r.success && r instanceof Data && ((Data)r).data instanceof Player) {
+//                    Player player = (Player) ((Data) r).data;
+//                    ArrayList<Player>players=Club.getClub().players,allPlayers=Club.getClub().allPlayers;
+//                    synchronized (players){
+//                        players.add(player);
+//
+//                    }
+//                    synchronized (allPlayers) {
+//                        allPlayers.add(player);
+//                    }
+//                }
+//                Platform.runLater(
+//                        () -> {
+//                            Alert alert = new Alert((r.success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR));
+//                            alert.setContentText(r.message);
+//                            alert.show();
+//
+//                            if (r.success && View.currentView instanceof AddPlayerView) {
+//                                View currentView = View.currentView;
+//                                ((AddPlayerView) currentView).loadSearchView();
+//                            }
+//
+//                        }
+//                );
             }else if(r.action ==Action.BUY){
                 if(!(r instanceof Data) || !(((Data)r).data instanceof  Player))return;
                 Player bought = (Player)((Data)r).data;
-                Club.getClub().forAuction.remove(bought);
+
+
+
                 View currentView = View.currentView;
 
                 if(currentView instanceof MarketplaceView){
@@ -84,12 +170,28 @@ public class ServerReader extends Thread{
                                 controller.remove(bought);
                             }
                     );
+                }else if(currentView instanceof RequiresUpdate){
+                    Platform.runLater(
+                            ()->{
+                            ((RequiresUpdate) currentView).update(bought);
+                        }
+                    );
+                }
+                Club.getClub().forAuction.remove(bought);
+
+                Player fromDatabase = Club.getClub().getPlayer(bought);
+                fromDatabase.toggleForSale();
+                fromDatabase.addAttribute(bought.getAttribute(AttributeKey.CLUB));
+                HashMap<Player,String> forAuction = Club.getClub().forAuction;
+                synchronized(forAuction) {
+                    forAuction.remove(bought);
                 }
             }else if(r.action ==Action.SELL){
                 if(!(r instanceof Data) || !(((Data)r).data instanceof  Player))return;
                 Data data = (Data)r;
                 Player tobeSold = (Player)data.data;
-                Club.getClub().forAuction.put(tobeSold,data.message);
+                HashMap<Player,String> forAuction = Club.getClub().forAuction;
+
                 View currentView = View.currentView;
                 if(currentView instanceof MarketplaceView){
                     MarketplaceView controller = (MarketplaceView)currentView;
@@ -100,13 +202,16 @@ public class ServerReader extends Thread{
                             }
                     );
                 }
+                synchronized(forAuction) {
+                    forAuction.put(tobeSold, data.message);
+                }
             }else if(r.action == Action.SEARCH || r.action == Action.SEARCH_MAX){
                 if(!(r instanceof Data) || !(((Data)r).data instanceof ArrayList))return;
                 ArrayList<Player> filtered = (ArrayList<Player>)((Data)r).data;
                 View currentView = View.currentView;
-                if(currentView instanceof PlayerSearchView){
+                if(currentView instanceof MyClubView){
                     Platform.runLater(()->{
-                        PlayerSearchView controller = (PlayerSearchView)currentView;
+                        MyClubView controller = (MyClubView)currentView;
                         controller.clearContainer();
                         controller.addPlayers(filtered);
 

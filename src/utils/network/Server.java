@@ -34,6 +34,9 @@ public class Server extends Thread{
         PlayerDatabase.initialize();
         clients = new HashMap<Attribute,ClientReader>();
         loginCredentials = new HashMap<>();
+
+
+
         forAuction = new HashMap<>();
 //        Random r = new Random();
 //        for(Player p:PlayerDatabase.getInstance().players) {
@@ -125,11 +128,11 @@ public class Server extends Thread{
                         return;
                     }
 
-                    ArrayList<Player> players = PlayerDatabase.getInstance().filterPlayers(clubAttr);
+//                    ArrayList<Player> players = PlayerDatabase.getInstance().filterPlayers(clubAttr);
 
 
 
-                    Club club = new Club(parts[0], players, forAuction);
+                    Club club = new Club(parts[0], PlayerDatabase.getInstance().players(), forAuction);
 
                     oos.writeObject(new Data(received.action,"club", true, club));
 

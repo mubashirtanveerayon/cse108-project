@@ -1,6 +1,8 @@
 package client.controller;
 
+import client.components.RequiresUpdate;
 import utils.Club;
+import utils.attribute.Attribute;
 import utils.network.ServerReader;
 import client.components.View;
 import utils.IOWrapper;
@@ -24,7 +26,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class PlayerCard extends  View{
+public class PlayerCard extends  View implements RequiresUpdate {
 
     private Player player;
     @FXML
@@ -32,7 +34,7 @@ public class PlayerCard extends  View{
 
 
     @FXML
-    private MaterialIconView actionButtonIcon;
+    public MaterialIconView actionButtonIcon;
 
     @FXML
     private Label clubLabel;
@@ -45,7 +47,7 @@ public class PlayerCard extends  View{
 
     @FXML
     private Label nameLabel;
-    private boolean inMarketPlace;
+    public boolean inMarketPlace;
 
 
     Club club;
@@ -59,21 +61,24 @@ public class PlayerCard extends  View{
 
 
             club.forAuction.remove(player);
-            ServerReader sr = ServerReader.getInstance();
-            if (sr == null) return;
-            IOWrapper io = sr.getIO();
-            io.write(new Data(Action.BUY, "buy", false, player));
 
             player.toggleForSale();
             club.players.add(player);
 
-            if (currentView instanceof MarketplaceView) {
-                ((MarketplaceView) currentView).remove(player);
+            Player fromDatabase = Club.getClub().getPlayer(player);
+            fromDatabase.addAttribute(player.getAttribute(AttributeKey.CLUB));
 
 
-                player.removeAttribute(AttributeKey.CLUB);
-                player.addAttribute(club.clubAttribute);
-            }
+            ((MarketplaceView) currentView).remove(player);
+
+
+            player.removeAttribute(AttributeKey.CLUB);
+            player.addAttribute(club.clubAttribute);
+
+            ServerReader sr = ServerReader.getInstance();
+
+            IOWrapper io = sr.getIO();
+            io.write(new Data(Action.BUY, "buy", false, player));
 
 
         }else{
@@ -85,20 +90,20 @@ public class PlayerCard extends  View{
                 try{
                     long price = Long.parseLong(result.get());
 
-                    ServerReader sr = ServerReader.getInstance();
-                    if (sr == null) return;
-                    IOWrapper io = sr.getIO();
-
-                    io.write(new Data(Action.SELL,String.valueOf(price),false,player));
 
                     club.forAuction.put(player,result.get());
                     player.toggleForSale();
                     club.players.remove(player);
 
 
-                    PlayerSearchView searchView = (PlayerSearchView)View.currentView;
+                    MyClubView searchView = (MyClubView)View.currentView;
                     searchView.removePlayer(player);
 
+                    ServerReader sr = ServerReader.getInstance();
+
+                    IOWrapper io = sr.getIO();
+
+                    io.write(new Data(Action.SELL,String.valueOf(price),false,player));
 
                 }catch(Exception e){
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -138,9 +143,17 @@ public class PlayerCard extends  View{
         club = Club.getClub();
     }
 
-    public void setPlayer(Player player,boolean inMarketPlace){
-        this.inMarketPlace = inMarketPlace;
+    public void setPlayer(Player player){
+        // this.inMarketPlace = inMarketPlace;
         this.player = player;
+        update(player);
+
+//        if(!inMarketPlace)actionButtonIcon.setGlyphName("MONETIZATION_ON");
+
+    }
+
+    @Override
+    public void update(Player player) {
         nameLabel.setText(player.getName());
         clubLabel.setText(player.getClub());
 
@@ -153,9 +166,5 @@ public class PlayerCard extends  View{
 
         Image positionImg = new Image(getClass().getResourceAsStream(String.format("/client/gui/res/images/%s.png",fileName)));
         positionImage.setImage(positionImg);
-
-        if(!inMarketPlace)actionButtonIcon.setGlyphName("MONETIZATION_ON");
-
     }
-
 }

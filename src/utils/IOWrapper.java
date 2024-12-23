@@ -60,7 +60,7 @@ public class IOWrapper {
             ois.close();
             closed = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 }

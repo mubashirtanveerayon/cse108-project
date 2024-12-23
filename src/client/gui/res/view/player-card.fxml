@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" alignment="CENTER" prefWidth="400.0" spacing="5.0" styleClass="parent-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controller.PlayerCard">
+<VBox fx:id="root" alignment="CENTER" spacing="5.0" styleClass="parent-container" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controller.PlayerCard">
    <children>
       <AnchorPane maxWidth="1.7976931348623157E308">
          <children>

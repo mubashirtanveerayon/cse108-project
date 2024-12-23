@@ -14,15 +14,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane fx:id="root" dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1400.0" stylesheets="@../style/colors.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controller.MainView">
+<SplitPane fx:id="root" dividerPositions="0.26" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1350.0" stylesheets="@../style/colors.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controller.MainView">
   <items>
     <AnchorPane id="parent" stylesheets="@../style/left-pane.css">
          <children>
             <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label fx:id="clubNameLabel" text=" Login as club owner">
+                  <Label fx:id="clubNameLabel" text=" Login as club manager">
                      <font>
-                        <Font name="System Bold" size="32.0" />
+                        <Font name="System Bold" size="28.0" />
                      </font>
                      <VBox.margin>
                         <Insets bottom="10.0" />
@@ -41,6 +41,20 @@
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
+                  </Button>
+                  <Button fx:id="myClubButton" disable="true" layoutX="10.0" layoutY="147.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onMyClubPressed" stylesheets="@../style/outline-button.css" text="My club">
+                     <graphic>
+                        <MaterialIconView glyphName="GROUP" />
+                     </graphic>
+                     <font>
+                        <Font size="28.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
                   </Button>
                   <Button fx:id="addPlayerButton" disable="true" layoutX="10.0" layoutY="205.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onAddPlayerPressed" stylesheets="@../style/outline-button.css" text="Add player">
                      <graphic>
@@ -78,7 +92,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <VBox.margin>
-                        <Insets bottom="20.0" top="150.0" />
+                        <Insets bottom="20.0" top="80.0" />
                      </VBox.margin>
                   </Button>
                   <Button fx:id="logoutButton" disable="true" layoutX="10.0" layoutY="509.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onLogoutPressed" stylesheets="@../style/outline-button.css" text="Logout">
@@ -140,7 +154,6 @@
                </top>
 
                <center>
-
 
 
                </center>

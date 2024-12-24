@@ -36,7 +36,7 @@ public class ServerReader extends Thread{
         instance =this;
         this.io = io;
     }
-//  Mumbai Indians
+
     public void run(){
         while(!stop ){
 
@@ -86,32 +86,7 @@ public class ServerReader extends Thread{
 
                         PlayerListView controller = (PlayerListView)View.currentView;
                         Platform.runLater(()->{
-                            Attribute club = player.getAttribute(AttributeKey.CLUB);
-                            Attribute position = player.getAttribute(AttributeKey.POSITION);
-                            Attribute country = player.getAttribute(AttributeKey.COUNTRY);
-                            if(!controller.clubMap.containsValue(club)){
-
-                               CheckBox cb = controller.createCheckBox();
-                               cb.setText(club.getContent().toString());
-                               controller.clubMap.put(cb,club);
-                               controller.clubContainer.getChildren().add(cb);
-                            }
-                            if(!controller.countryMap.containsValue(country)){
-
-                                CheckBox cb = controller.createCheckBox();
-                                cb.setText(country.getContent().toString());
-                                controller.countryMap.put(cb,country);
-                                controller.countryContainer.getChildren().add(cb);
-                            }
-
-                            if(!controller.positionMap.containsValue(position)){
-
-                                CheckBox cb = controller.createCheckBox();
-                                cb.setText(position.getContent().toString());
-                                controller.positionMap.put(cb,position);
-                                controller.positionContainer.getChildren().add(cb);
-                            }
-
+                            controller.update(player);
                             controller.filter();
                         });
 

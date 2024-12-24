@@ -119,30 +119,7 @@ public class PlayerListView extends View implements RequiresUpdate {
 
         addPlayers(club.allPlayers);
         for(Player p:club.allPlayers){
-            Attribute club = p.getAttribute(AttributeKey.CLUB);
-            Attribute country = p.getAttribute(AttributeKey.COUNTRY);
-            Attribute position = p.getAttribute(AttributeKey.POSITION);
-
-            if(!clubMap.containsValue(club)){
-                CheckBox checkBox = createCheckBox();
-                checkBox.setText(club.getContent().toString());
-                clubContainer.getChildren().add(checkBox);
-                clubMap.put(checkBox, club);
-            }
-            if(!countryMap.containsValue(country)){
-                CheckBox checkBox = createCheckBox();
-                checkBox.setText(country.getContent().toString());
-                countryContainer.getChildren().add(checkBox);
-                countryMap.put(checkBox, country);
-            }
-            if(!positionMap.containsValue(position)){
-                CheckBox checkBox = createCheckBox();
-                checkBox.setText(position.getContent().toString());
-                positionContainer.getChildren().add(checkBox);
-
-                positionMap.put(checkBox, position);
-            }
-
+            addCheckBox(p);
         }
 
 
@@ -152,6 +129,34 @@ public class PlayerListView extends View implements RequiresUpdate {
 //        addListenerToSliders(salarySlider);
 //        addListenerToSliders(heightSlider);
 
+    }
+
+    private void addCheckBox(Player player) {
+        Attribute club = player.getAttribute(AttributeKey.CLUB);
+        Attribute position = player.getAttribute(AttributeKey.POSITION);
+        Attribute country = player.getAttribute(AttributeKey.COUNTRY);
+        if(!clubMap.containsValue(club)){
+
+            CheckBox cb = createCheckBox();
+            cb.setText(club.getContent().toString());
+            clubMap.put(cb,club);
+            clubContainer.getChildren().add(cb);
+        }
+        if(!countryMap.containsValue(country)){
+
+            CheckBox cb = createCheckBox();
+            cb.setText(country.getContent().toString());
+            countryMap.put(cb,country);
+            countryContainer.getChildren().add(cb);
+        }
+
+        if(!positionMap.containsValue(position)){
+
+            CheckBox cb = createCheckBox();
+            cb.setText(position.getContent().toString());
+            positionMap.put(cb,position);
+            positionContainer.getChildren().add(cb);
+        }
     }
 
 //    private void addListenerToSliders(RangeSlider slider){
@@ -327,6 +332,8 @@ public class PlayerListView extends View implements RequiresUpdate {
 
     @Override
     public void update(Player player) {
+        addCheckBox(player);
+
 
         PlayerCard controller = playerCards.get(player);
         if(controller == null)return;

@@ -1,8 +1,7 @@
 echo off
 git add .
-set arg=%1
-if [arg] == [] goto exit
-git commit -m arg
+if [%1] == [] goto exit
+git commit -m %1
 git push -f origin master
 echo github push complete
 :exit

@@ -152,7 +152,7 @@ public class ServerReader extends Thread{
                         }
                     );
                 }
-                Club.getClub().forAuction.remove(bought);
+
 
                 Player fromDatabase = Club.getClub().getPlayer(bought);
                 fromDatabase.toggleForSale();
@@ -166,7 +166,8 @@ public class ServerReader extends Thread{
                 Data data = (Data)r;
                 Player tobeSold = (Player)data.data;
                 HashMap<Player,String> forAuction = Club.getClub().forAuction;
-
+                Player fromDatabase = Club.getClub().getPlayer(tobeSold);
+                fromDatabase.toggleForSale();
                 View currentView = View.currentView;
                 if(currentView instanceof MarketplaceView){
                     MarketplaceView controller = (MarketplaceView)currentView;

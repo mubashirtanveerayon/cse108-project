@@ -115,7 +115,7 @@ public class ClientReader extends Thread{
 
 
                     Player fromDatabase = db.filterPlayers(new StringAttribute(player.getName(),AttributeKey.NAME)).get(0);
-//                    fromDatabase.removeAttribute(AttributeKey.CLUB);
+                    fromDatabase.removeAttribute(AttributeKey.CLUB);
                     fromDatabase.addAttribute(club.clubAttribute);
 //
                     if(fromDatabase.hasAttribute(AttributeKey.NUMBER) && !club.getSearch().filterPlayers(club.clubAttribute,fromDatabase.getAttribute(AttributeKey.NUMBER)).isEmpty())
@@ -124,7 +124,7 @@ public class ClientReader extends Thread{
 //
 //
                     fromDatabase.toggleForSale();
-//                    player.toggleForSale();
+
                     server.forAuction.remove(player);
                     server.broadcast(club,new Data(Action.BUY,"buy",true,player));
                 }

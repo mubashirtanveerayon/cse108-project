@@ -63,17 +63,18 @@ public class PlayerCard extends  View implements RequiresUpdate {
             club.forAuction.remove(player);
 
             player.toggleForSale();
+            player.addAttribute(Club.getClub().clubAttribute);
             club.players.add(player);
 
             Player fromDatabase = Club.getClub().getPlayer(player);
-            fromDatabase.addAttribute(player.getAttribute(AttributeKey.CLUB));
-
+            fromDatabase.addAttribute(Club.getClub().clubAttribute);
+            fromDatabase.toggleForSale();
 
             ((MarketplaceView) currentView).remove(player);
 
 
-            player.removeAttribute(AttributeKey.CLUB);
-            player.addAttribute(club.clubAttribute);
+//            player.removeAttribute(AttributeKey.CLUB);
+//            player.addAttribute(club.clubAttribute);
 
             ServerReader sr = ServerReader.getInstance();
 

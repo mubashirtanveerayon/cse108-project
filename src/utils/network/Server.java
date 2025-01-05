@@ -25,7 +25,7 @@ public class Server extends Thread{
     public static final long DELAY = 1000;
     public static final int TIMEOUT = 60;
     private Map<Attribute, ClientReader>clients;
-    HashMap<Attribute,String>loginCredentials;
+    HashMap<Attribute,String>loginCredentials;//clubname,password
     HashMap<Player,String>forAuction;
     public static final int PORT = 8000;
     private boolean running=false;
@@ -141,7 +141,7 @@ public class Server extends Thread{
 
 
 
-                    ClientReader reader =  new ClientReader( club,io,server);
+                    ClientReader reader = new ClientReader( club,io,server);
                     reader.start();
                     clients.put(club.clubAttribute,reader);
 

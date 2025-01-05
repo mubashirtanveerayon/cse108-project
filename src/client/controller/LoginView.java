@@ -77,8 +77,8 @@ public class LoginView extends View {
                 alert.setTitle("Sign up response");
                 alert.setContentText(message);
                 alert.showAndWait();
-                socket.close();
             }
+            socket.close();
         }catch(Exception e){
             e.printStackTrace();
         }

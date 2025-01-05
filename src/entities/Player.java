@@ -34,6 +34,10 @@ public class Player extends Entity implements Serializable{
         forSale=!forSale;
     }
 
+    public boolean isForSale(){
+        return forSale;
+    }
+
     public String getName() {
         Attribute attr = getAttribute(AttributeKey.NAME);
         if (attr==null)return null;

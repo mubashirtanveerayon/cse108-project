@@ -1,5 +1,5 @@
 ## Recommended JDK
-https://www.azul.com/downloads/?version=java-21-lts&architecture=x86-64-bit&package=jdk-fx#zulu
+https://www.azul.com/downloads/?version=java-23&architecture=x86-64-bit&package=jdk-fx#zulu
 
 ## Dependencies
 fontawesomefx: materialicons (https://mavenlibs.com/maven/dependency/de.jensd/fontawesomefx-materialicons)
